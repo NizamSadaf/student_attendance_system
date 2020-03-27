@@ -1,0 +1,62 @@
+<?php
+include "../connect.php";
+?>
+<style>
+	table
+	{
+		border:1px solid;
+		text-align: center;
+		width: 100%;
+	}
+	a
+	{
+		outline: none;
+		text-decoration: none;
+	}
+</style>
+<html>
+<head>
+
+</head>
+<body>
+<form action="" method="post">
+  <input type="text" name="course_id" method="post">
+  <input name="submit" type="submit" value="Submit">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+  $sql="select student.id,student_attendance.student_name,subject.subject_name, student_attendance.status from student inner join subject on student.semester=subject.semester inner join student_attendance on student_attendance.semester=subject.semester where course_id='$_POST[course_id]' && student.id=student_attendance.id
+  ;";
+   $query=mysqli_query($link,$sql);
+   ?>
+   <table>
+   	<tr>	
+   		<th>Student Id</th>
+   		<th>Student Name</th>
+   		<th>Subject Name</th>
+   		<th>Present</th>
+   		<th>Absent</th>
+   		<th>Status</th>
+      </tr>
+   
+   <?php
+  while($row=mysqli_fetch_array($query))
+  {
+      ?>
+      <tr>
+      <td> <?php echo $row["id"]; ?></td>
+      <td> <?php echo $row["student_name"]; ?></td>
+      <td> <?php echo $row["subject_name"]; ?></td>
+      <td><a href="present.php?id=<?php echo $row["id"]?>">Present</a></td>
+      <td><a href="absent.php?id=<?php echo $row["id"]?>">Absent</a></td>
+      <td><?php echo $row["status"]; ?></td>
+  </tr>
+      <?php
+   }
+}
+?>
+</table>
+</body>
+</html>
